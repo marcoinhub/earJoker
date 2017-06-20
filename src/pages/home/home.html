@@ -1,7 +1,21 @@
-<ion-menu [content]="mycontent">
-  <ion-content>
-    <ion-list>
-      <p>some menu content, could be list items</p>
-    </ion-list>
-  </ion-content>
-</ion-menu>
+
+<ion-header>
+  <ion-navbar >
+    <ion-title>
+      最新趣图
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content >
+    <div  *ngIf="newstImages">
+      <div  *ngFor="let newstImage of newstImages" >
+        <h3 class="imgHeader">{{newstImage.content}}</h3>
+        <img class="newimg"  src="{{newstImage.url}}" >
+        <h5 class="imgFooter">{{newstImage.updatetime}}</h5>
+      </div>
+  </div>
+  <ion-spinner name="bubbles"  *ngIf="!newstImages"></ion-spinner>
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content>正在加载中</ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

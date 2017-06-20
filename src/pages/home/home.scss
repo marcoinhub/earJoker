@@ -1,3 +1,23 @@
 page-home {
+  background: $bac;
+  .newimg{
+    width: 100%;
+  }
+   @mixin clear{
+     margin: 0;
+     padding: 0;
+   }
+  .imgHeader{
+    @include clear;
+    text-align: center;
 
+    padding: 1em 0 ;
+  }
+  .imgFooter{
+    @include clear;
+    text-align: right;
+    background: #ffffff;
+    padding: 1em 0.5em 2em;
+    margin-bottom: 1em;
+  }
 }

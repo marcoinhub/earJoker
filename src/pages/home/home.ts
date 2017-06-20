@@ -1,28 +1,46 @@
-import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
-import {HttpService} from "../../app/http.service";
+import { Component ,OnInit} from '@angular/core';
+import { NavController} from 'ionic-angular';
+import {HttpService,API,newsimg} from "../../app/http.service";
 //import {Person} from '../person/person'
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
-export class HomePage {
+export class HomePage  implements OnInit{
   delete(chip:Element){
      chip.remove();
   }
+  page:number=1;
+  row:number=10;
+  newstImages:newsimg[]=[];
+  ngOnInit():void{
+        this.http.getHttp(API.NEWS_IMG,{page:this.page++,rows:this.row})
+          .then(res=>{
 
-  toPerson():void{
-    //this.navCtrl.push(Person);
-    let url:string=' http://api.avatardata.cn/Joke/QueryJokeByTime?key=eb2601a1feeb437f87c69243659f9e3f&page=2&rows=10&sort=asc&time=1418745237';
-    this.http.getHttp(url).then(res=>{
-      let body=res.json();
-      console.log(body.result);
-    })
+              let body=JSON.parse(res._body);
+              this.newstImages=body.result;
+              console.log(this.newstImages);
+          });
+  }
+  doInfinite(infiniteScroll) {
+    this.http.getHttp(API.NEWS_IMG,{page:this.page++,rows:this.row})
+      .then(res=>{
+        let body=JSON.parse(res._body);
+        let length=body.result.length;
+        this.newstImages.concat(body.result);
+        for(let item of body.result){
+          this.newstImages.push(item);
+        }
+        console.log(this.newstImages);
+        if(length>=10){
+          infiniteScroll.complete();
+        }else {
+          infiniteScroll.enable();
+        }
+      })
   }
   constructor(public navCtrl: NavController,private http:HttpService) {
-
   }
-
 }
 
